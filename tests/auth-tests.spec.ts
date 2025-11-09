@@ -5,14 +5,14 @@ import { LoginDTO } from './dto/LoginDTO'
 const BASE_URL = 'https://backend.tallinn-learning.ee'
 
 test('TL-11-1 Login/student returns 200 and JWT', async ({ request }) => {
-  console.log("ENV USER:", process.env.USERNAME)
-  console.log("ENV PASSWORD:", process.env.PASSWORD)
+  console.log('ENV USER:', process.env.USERNAME)
+  console.log('ENV PASSWORD:', process.env.PASSWORD)
 
   const response = await request.post(`${BASE_URL}/login/student`, {
     data: LoginDTO.createLoginWithCorrectData(),
   })
-  console.log("STATUS =", response.status())
-  console.log("BODY =", await response.text())
+  console.log('STATUS =', response.status())
+  console.log('BODY =', await response.text())
 
   expect(response.status()).toBe(StatusCodes.OK)
   expect((await response.text()).length).toBeGreaterThan(0)
@@ -66,8 +66,8 @@ test('TL-11-8 Login/student returns 400 for incorrect types', async ({ request }
   const response = await request.post(`${BASE_URL}/login/student`, {
     data: {
       username: 111111,
-      password: false
-    }
+      password: false,
+    },
   })
   expect(response.status()).toBe(StatusCodes.BAD_REQUEST)
 })
@@ -77,8 +77,8 @@ test('TL-11-9 Login/student returns 401 if there are additional fields', async (
     data: {
       username: 'test',
       password: 'test123',
-      comment: 'Test'
-    }
+      comment: 'Test',
+    },
   })
   expect(response.status()).toBe(StatusCodes.UNAUTHORIZED)
 })
@@ -88,7 +88,7 @@ test('TL-11-10 Login/student returns 401 if username is null', async ({ request 
     data: {
       username: null,
       password: '1111111',
-    }
+    },
   })
   expect(response.status()).toBe(StatusCodes.UNAUTHORIZED)
 })
