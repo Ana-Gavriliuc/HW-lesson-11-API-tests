@@ -15,3 +15,18 @@ test('get orders with api client', async ({ request }) => {
 
   expect(ordersBefore.length < ordersAfter.length).toBeTruthy()
 })
+
+test('get order by id with api client', async ({ request }) => {
+  const apiClient = await ApiClient.create(request)
+  const id = await apiClient.createOrderAndReturnOrderId()
+  const order = await apiClient.getOrderById(id)
+  expect(order.id).toBe(id)
+})
+
+test('delete order by id with api client', async ({ request }) => {
+  const apiClient = await ApiClient.create(request)
+  const id = await apiClient.createOrderAndReturnOrderId()
+  await apiClient.deleteOrderById(id)
+  const orderAfterDelete = await apiClient.getOrderById(id)
+  expect(orderAfterDelete.id).toBeUndefined()
+})

@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import { OrderDTO } from '../tests/dto/OrderDTO'
 import { expect } from '@playwright/test'
 
+
 const serviceURL = 'https://backend.tallinn-learning.ee';
 const loginPath = '/login/student';
 const orderPath = '/orders';
@@ -61,5 +62,38 @@ export class ApiClient {
     expect(json.length).toBeGreaterThan(0);
 
     return json;
+  }
+
+  async getOrderById(id: number): Promise<OrderDTO> {
+    console.log('Getting order by id...');
+
+    const response = await this.request.get(`${serviceURL}${orderPath}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${this.jwt}`
+      }
+    })
+
+    expect(response.status()).toBe(StatusCodes.OK);
+
+    const text = await response.text();
+    if (text === '') {
+      return {} as OrderDTO;
+    }
+
+    const json: OrderDTO = JSON.parse(text)
+    return json;
+  }
+
+  async deleteOrderById(id: number): Promise<void> {
+    console.log('Delete order by id...');
+
+    const response = await this.request.delete(`${serviceURL}${orderPath}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${this.jwt}`
+      }
+    })
+
+    expect(response.status()).toBe(StatusCodes.OK);
+
   }
 }
